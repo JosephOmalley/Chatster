@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Message( { message }) {
+export default function Message( {message, name}) {
     return (
         <div>
-            {message}
+            <h1> {message}  {name} </h1> 
         </div>
 
     );

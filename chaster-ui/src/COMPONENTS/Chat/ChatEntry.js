@@ -1,36 +1,60 @@
-import react, { useRef, useState } from  "react"; 
-import ReactDOM from 'react-dom';
+import { useRef, useState, useEffect } from  "react"; 
+import io from 'socket.io-client';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import ChatCard from './Message'
-import Paper from '@mui/material/Paper';
+import { useLocation } from 'react-router-dom';
 import Messages from './MessageList'
 import { v4 as uuidv4 } from 'uuid';
 
-
+const SERVER = "http://localhost:5000"
 function ChatEntry() {
-    const [messages, setMessages] = useState([{ id: 1, message : "Hello Joe"}])
-    
+
+
+    const socket = io.connect(SERVER);
+
+    const location = useLocation();
+
+    const [messages, setMessages] = useState({ id: 1, message : "", name : ""});
+    const [listOfChats, setChats] = useState([])
+
+
+    // todo... 
+    // right now you have the user name and message being stored in the 'messages' state varible
+    // your backend code has socket io listening for name and username
+    // so pass name and message from messages state varible to socket io backend
+    // in your useEffect hook get the varible passed in prev step and update a new state varible that will be rendered to the client(s) 
+
+
+    const renderChat = () => {
+        return listOfChats.map(({ id, message, name}) => (
+            <div key={id}>
+                <h1> {message}  {name} </h1> 
+            </div>
+        ))
+    }
+
     const userMessage = useRef(); 
+
     
     function handleAddMessage(e){
-        const messageTryingToPost = userMessage.current.value
-        if (messageTryingToPost === '') return
-        setMessages(prevMessages => {
-            return [...prevMessages, {id : uuidv4(), name: messageTryingToPost}]
-    })
-    userMessage.current.value = null
+        let name = location.state.username;
+        let message = userMessage.current.value;
+        if (message === '') return
+        socket.emit('message', {name, message})
+        socket.on('message', ({name, message}) =>{
+            setChats([...listOfChats, {id: uuidv4(), message: message, name: name}])
+
+        })
+        
+        userMessage.current.value = '';
 }
     return (
         <>
-        <Box className="a" sx={{height: '150px', width: '250px', overflowY: 'auto'}}> 
+        <Box sx={{height: '450px', width: '450px', overflowY: 'auto'}}> 
         
-        <Messages messages={messages}/>
+        {renderChat()}
 
-        
-
-        
         </Box> 
         <Box
         sx={{

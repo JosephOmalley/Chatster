@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-
-import { useForm, ErrorMessage, Controller } from "react-hook-form";
+import React, { useState, useEffect, useContext } from "react";
+import io from 'socket.io-client';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
@@ -11,37 +10,35 @@ import FormControl from "@mui/material/FormControl";
 import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
 
-function Welcome() {
-
-  const [data, setData] = useState(null)
+function Welcome(props) {
   
-  const [choosenRoom, getRoom] = useState(''); // the state
-
-  const getRoomValue = (e) => { getRoom(e.target.value); }
-
   const history = useHistory();
 
-  const [roomEmpty, checkIfRoomEmpty] = useState(false); // if select room input is empty this hook updates the room Empty var  
+  const [data, setData] = useState('') // gets data from express server on port: 5000
 
-  const [userNameEmpty, checkIfUserNameEmpty] = useState(false);
+  const [choosenUserName, getUserName] = useState('');// holds information on the state of the selected user name
 
-  const [choosenUserName, getUserName] = useState ('');
+  const [choosenRoom, getRoom] = useState(''); // holds information on the state of the selected room
 
-  useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+  const [userNameEmpty, checkIfUserNameEmpty] = useState(false); // controls state of error message for username field
+
+  const [roomEmpty, checkIfRoomEmpty] = useState(false); // controls error message for room field  
+
+  const [room, setRoom] = useState('') // keeps state of the label value of the select room field
+
+
+
   
-
-  const getUserNameValue = (e) => { getUserName(e.target.value) }; 
-
 
   const tryToEnterRoom = () => {
     checkIfRoomEmpty(false)
     checkIfUserNameEmpty(false)
     if (choosenRoom.length !== 0 && choosenUserName.length !== 0 ){
-    history.push("/chat");
+    history.push({
+      pathname: "/chat",
+      state: {username: choosenUserName}
+
+  })
     }
     if (choosenRoom.length === 0){
     checkIfRoomEmpty(true)
@@ -51,12 +48,6 @@ function Welcome() {
       }
     console.log("error one or more fields are blank ")
   }
-
-  const [room, setRoom] = useState('');
-
-
-
-  
 
   return (
     <Box
@@ -91,11 +82,11 @@ function Welcome() {
       
       
      
-          <TextField  error={userNameEmpty} id="standard-basic" onChange={getUserNameValue} label="Enter user name" />
+          <TextField  error={userNameEmpty} id="standard-basic" onChange={(event) => getUserName(event.target.value)} label="Enter user name" />
 
       <InputLabel id="demo-simple-select-standard-label" sx={{position: 'absolute', top: '144px'}} >Choose a room</InputLabel>
 
-        <Select error={roomEmpty} labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" value={room} label="Choose a room" onChange={(event) => { getRoomValue(event); setRoom(event.target.value);}}>
+        <Select error={roomEmpty} labelId="demo-simple-select-standard-label" id="demo-simple-select-standard" value={room} label="Choose a room" onChange={(event) => { getRoom(event.target.value); setRoom(event.target.value);}}>
             <MenuItem value="1">room 1</MenuItem>
             <MenuItem value="2">room 2</MenuItem>
             <MenuItem value="3">room 3</MenuItem>
