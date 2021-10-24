@@ -10,11 +10,9 @@ import FormControl from "@mui/material/FormControl";
 import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
 
-function Welcome(props) {
+function Welcome() {
   
   const history = useHistory();
-
-  const [data, setData] = useState('') // gets data from express server on port: 5000
 
   const [choosenUserName, getUserName] = useState('');// holds information on the state of the selected user name
 
@@ -36,7 +34,9 @@ function Welcome(props) {
     if (choosenRoom.length !== 0 && choosenUserName.length !== 0 ){
     history.push({
       pathname: "/chat",
-      state: {username: choosenUserName}
+      state: {username: choosenUserName,
+              roomNumber: choosenRoom
+      }
 
   })
     }
@@ -59,7 +59,7 @@ function Welcome(props) {
       alignItems: 'center',
       display: 'flex',
       }}>
-      <h2>{!data ? "Loading..." : data}</h2> 
+      
 
     <Box 
     sx={{
