@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Welcome from './COMPONENTS/Welcome';
-import ChatEntry from './COMPONENTS/Chat/ChatEntry'
-import ChatDisplay from './COMPONENTS/Chat/ChatDisplay'
+import ChatEntry from './COMPONENTS/ChatEntry'
+
 import reportWebVitals from './reportWebVitals';
 
 import {

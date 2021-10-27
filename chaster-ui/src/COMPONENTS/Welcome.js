@@ -50,7 +50,7 @@ function Welcome() {
   }
 
   return (
-    <Box
+    <div
     sx={{
       height: '100vh',
       width: '100%',
@@ -61,7 +61,7 @@ function Welcome() {
       }}>
       
 
-    <Box 
+    <div 
     sx={{
       height: 300,
       width: 300,
@@ -99,8 +99,8 @@ function Welcome() {
         </Stack>
         </FormControl>
         
-    </Box>
-    </Box>
+    </div>
+    </div>
   );
 }
 

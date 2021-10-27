@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useLocation } from 'react-router-dom';
-import Messages from './MessageList'
+
 import { v4 as uuidv4 } from 'uuid';
 
 const SERVER = "http://localhost:5000"
@@ -28,13 +28,12 @@ function ChatEntry() {
     useEffect(
         
         () => {
-            console.log("asdf")
+            const room = location.state.roomNumber
             socketRef.current = io.connect(SERVER)
-            socketRef.current.on("message", ({ name, message}) => {
+            socketRef.current.on(`message${room}`, ({ name, message}) => {
                 setChats([...listOfChats, {name, message}])
             })
             return () => socketRef.current.disconnect()
-            
         },
         [ listOfChats ]
     )
@@ -45,7 +44,8 @@ function ChatEntry() {
         e.preventDefault()
         console.log(messages)
         const {name, message} = messages
-        socket.emit("message", {name, message})
+        const room = location.state.roomNumber
+        socket.emit("message", {name, message, room})
         setMessages({message: "", name: location.state.username})
     }
 
