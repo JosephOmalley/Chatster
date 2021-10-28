@@ -35,3 +35,6 @@ io.on('connection', socket => {
 
 
 
+// add join and disconnect messages. 
+
+// connect to mongo database

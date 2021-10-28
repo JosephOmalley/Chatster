@@ -51,10 +51,10 @@ function Welcome() {
 
   return (
     <div
-    sx={{
+    style={{
       height: '100vh',
       width: '100%',
-      bgcolor: 'secondary.main', 
+      backgroundColor: '#85219C', 
       justifyContent: 'center',
       alignItems: 'center',
       display: 'flex',
@@ -62,10 +62,10 @@ function Welcome() {
       
 
     <div 
-    sx={{
-      height: 300,
-      width: 300,
-      bgcolor: '#fff',
+    style={{
+      height: "300px",
+      width: "300px",
+      backgroundColor: '#fff',
       justifyContent: 'center',
       alignItems: 'center',
       display: 'flex'
